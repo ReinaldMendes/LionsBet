@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const mongoDB =
-  "mongodb+srv://reinald302009:gMn95QlTaahvIBtF@cluster0.sviwi.mongodb.net/lionsbet";
+const mongoDB = process.env.MONGODB;
 async function main() {
   try {
     await mongoose.connect(mongoDB);
@@ -10,5 +9,5 @@ async function main() {
     console.log(error);
   }
 }
-
+main();
 export default mongoose;

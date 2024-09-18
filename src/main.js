@@ -1,7 +1,10 @@
+import "dotenv/config";
 import e from "express";
 import user_router from "./http/router/user_router.js";
+import roullete_bet_router from "./http/router/roullete_bet_router.js";
 const app = e();
-const port = 3000;
+// const port = 3000;
 app.use(e.json());
+app.use("/roullet", roullete_bet_router);
 app.use("/user", user_router);
-app.listen(port, () => console.log("Servidor escutando "));
+app.listen(process.env.API_PORT, () => console.log("Servidor escutando "));

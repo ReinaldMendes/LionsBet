@@ -1,5 +1,6 @@
-import db from "../db.js";
-const Schema = db.Schema;
+import conn from "../conn.js";
+
+const Schema = conn.Schema;
 
 const rechargeSchema = new Schema({
   value: {
@@ -8,10 +9,11 @@ const rechargeSchema = new Schema({
   },
   status: {
     type: Schema.Types.String,
-    enum: ["Recusado", "Finalizado", "Pedente", "Cancelado"],
-    default: "Pendente",
+    enum: ["FINALIZADA", "PENDENTE", "RECUSADA", "CANCELADA"],
+    default: "PENDENTE",
   },
 });
+
 const walletSchema = new Schema({
   balance: {
     type: Schema.Types.Number,
@@ -20,8 +22,8 @@ const walletSchema = new Schema({
   },
   password: {
     type: Schema.Types.String,
-    minLenght: 4,
-    maxLenght: 4,
+    minLength: 4,
+    maxLength: 4,
   },
   recharges: [rechargeSchema],
 });
@@ -34,26 +36,41 @@ const userSchema = new Schema({
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v);
       },
     },
-    cpf: {
-      type: Schema.Types.String,
-    },
-    nickname: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    password: {
-      type: Schema.Types.String,
-      required: true,
-      validate: {
-        validator: function (v) {},
+    required: true,
+  },
+  cpf: {
+    type: Schema.Types.String,
+    minLength: 11,
+    maxLength: 11,
+    validate: {
+      validator: function (v) {
+        return /^\d+$/.test(v);
       },
     },
-    wallet: walletSchema,
-    acceptedTerms: {
-      type: Schema.Types.String,
+    required: true,
+  },
+  nickname: {
+    type: Schema.Types.String,
+    required: true,
+  },
+  password: {
+    type: Schema.Types.String,
+    required: true,
+    validate: {
+      validator(v) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+          v
+        );
+      },
     },
   },
+  wallet: walletSchema,
+  acceptedTerms: {
+    type: Schema.Types.Boolean,
+    required: true,
+  },
 });
-const User = db.model("User", userSchema);
+
+const User = conn.model("User", userSchema);
 
 export default User;
