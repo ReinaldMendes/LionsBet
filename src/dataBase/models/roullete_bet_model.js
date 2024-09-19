@@ -1,23 +1,24 @@
 import conn from "../conn.js";
-import Bet from "../bet_schema.js";
+import betSchema from "../bet_schema.js";
 
 const Schema = conn.Schema;
 
-const roulletBetSchema = new Schema({
-  bet: Bet,
+const roulleteBetSchema = new Schema({
+  bet: betSchema,
   betNumber: {
     type: Schema.Types.Number,
-    require: "true",
+    required: true,
     min: 1,
     max: 100,
   },
   drawnNumber: {
     type: Schema.Types.Number,
+    required: true,
     min: 1,
     max: 100,
   },
 });
 
-const Roullet = conn.model("Roullet", roulletBetSchema);
+const RoulleteBet = conn.model("RoulleteBet", roulleteBetSchema);
 
-export default User;
+export default RoulleteBet;
